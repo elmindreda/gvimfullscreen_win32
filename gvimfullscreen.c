@@ -5,6 +5,10 @@
 */
 #include <windows.h>
 
+#ifndef GCL_HBRBACKGROUND
+#define GCL_HBRBACKGROUND -10
+#endif
+
 int g_x, g_y, g_dx, g_dy;
 
 BOOL CALLBACK EnumChildProc(HWND hwnd, LPARAM lParam);
@@ -22,7 +26,7 @@ BOOL CALLBACK FindWindowProc(HWND hwnd, LPARAM lParam)
    	return FALSE;
 }
 
-LONG _declspec(dllexport) ToggleFullScreen()
+LONG __declspec(dllexport) ToggleFullScreen()
 {
 	HWND hTop = NULL;
 	DWORD dwThreadID;
@@ -107,7 +111,7 @@ BOOL CALLBACK EnumChildProc(HWND hwnd, LPARAM lParam)
 		SetWindowLong(hwnd, GWL_EXSTYLE, GetWindowLong(hwnd, GWL_STYLE) & ~WS_EX_WINDOWEDGE); 
 		SetWindowPos(hwnd, HWND_TOP, 0, 0, g_dx, g_dy, SWP_SHOWWINDOW);
 
-    SetClassLong(hwnd, GCL_HBRBACKGROUND, CreateSolidBrush(RGB(0,0,0)));
+    SetClassLongPtrA(hwnd, GCL_HBRBACKGROUND, (INT_PTR) CreateSolidBrush(RGB(0,0,64)));
 	}
 	return TRUE;
 	
